@@ -4,10 +4,9 @@ import lombok.Data;
 
 import java.util.List;
 
-
 public class SimpleIds {
 
-    void performPurchase(Simple.Id<Simple.Customer> userId, Simple.Id<Simple.Product> productId, long amount) {
+    void performPurchase(Simple.CustomerId userId, Simple.ProductId productId, long amount) {
         Simple api = null;
 
         var basket = api.getBasketForUser(userId);
@@ -22,40 +21,52 @@ public class SimpleIds {
 }
 
 interface Simple {
-    @Data
-    class Id<Container> {
-        long raw;
+    @Data final class ProductId {
+        private long value;
+    }
+    @Data final class CustomerId{
+        private long value;
+    }
+    @Data final class BasketId {
+        private long value;
+    }
+    @Data final class OrderId {
+        private long value;
+    }
+    @Data final class PaymentId {
+        private long value;
     }
 
-    Basket getBasketForUser(Id<Customer> userId);
-    void addProductToShoppingCart(Id<Basket> basketId, Id<Product> productId, long amount);
-    Product getProduct(Id<Product> productId);
-    List<Product> getProductsInShoppingCart(Id<Customer> userId, Id<Basket> basketId);
-    Payment getPaymentToken(Id<Basket> basketId, Id<Customer> userId);
-    Order confirmPaymentAndPlaceOrder(Id<Customer> userId, Id<Payment> paymentToken, Id<Basket> basketId);
+    Basket getBasketForUser(CustomerId userId);
+    void addProductToShoppingCart(BasketId basketId, ProductId productId, long amount);
+    Product getProduct(ProductId productId);
+    List<Product> getProductsInShoppingCart(CustomerId userId, BasketId basketId);
+    Payment getPaymentToken(BasketId basketId, CustomerId userId);
+    Order confirmPaymentAndPlaceOrder(CustomerId userId, PaymentId paymentToken, BasketId basketId);
+
 
     @Data
     class Customer {
-        Id<Customer> id;
+        CustomerId id;
     }
 
     @Data
     class Basket {
-        Id<Basket> id;
+        BasketId id;
     }
 
     @Data
     class Product {
-        Id<Product> id;
+        ProductId id;
     }
 
     @Data
     class Payment {
-        Id<Payment> id;
+        PaymentId id;
     }
 
     @Data
     class Order {
-        Id<Order> id;
+        OrderId id;
     }
 }
