@@ -1,5 +1,8 @@
 package de.codecentric.javaland.idflavors;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
@@ -38,8 +41,10 @@ interface Sealed {
     Order confirmPaymentAndPlaceOrder(Id<CustomerId> userId, Id<PaymentId> paymentToken, Id<BasketId> basketId);
 
     @Data
+    @JsonSerialize(using = SealedIdFeatures.Serialize.class)
+    @JsonDeserialize(using = SealedIdFeatures.Deserialize.class)
     class Id<T extends IdType> {
-        long raw;
+        final long raw;
     }
 
     @Data
